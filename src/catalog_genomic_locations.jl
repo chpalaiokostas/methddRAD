@@ -1,11 +1,6 @@
-# create a catalog with all genomic locations in used samples
-# expects that a merged bam has been created
-using CSV
-using DataFrames
-using XAM
-
-# expects the merged bam file
-filename = ARGS[1]
+export get_strand
+export raw_catalog_locations
+export merged_catalog
 
 # didn't find any built-in function for finding the strand in XAM
 """
@@ -21,59 +16,61 @@ function get_strand(record::BAM.Record)
     end
 end
 
-reader = open(BAM.Reader,filename)
-record = BAM.Record()
-annotation = DataFrame()
-
-# populate annotation with Chr, Start, End, Strand
-while !eof(reader)
-    empty!(record)
-    read!(reader, record)
-    if !BAM.ismapped(record)
-        continue
+"""
+    raw_catalog_locations(reader::BAM.Reader)
+Find all unique locations.
+Needs a merged bam file from all available samples
+"""
+function raw_catalog_locations(reader::BAM.Reader)
+    reader = open(BAM.Reader,reader)
+    record = BAM.Record()
+    annotation = DataFrame()
+    # populate annotation with Chr, Start, End, Strand
+    while !eof(reader)
+        empty!(record)
+        read!(reader, record)
+        if !BAM.ismapped(record)
+            continue
+        end
+        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 600)
+            push!(annotation,(Chr=BAM.refname(record), 
+            Start=BAM.position(record),
+            End=BAM.position(record) + BAM.templength(record),
+            Strand=get_strand(record)))
+        end
     end
-    if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 600)
-        push!(annotation,(Chr=BAM.refname(record), 
-        Start=BAM.position(record),
-        End=BAM.position(record) + BAM.templength(record),
-        Strand=get_strand(record)))
-    end
+    close(reader)
+    unique!(annotation)
+    CSV.write("genomic_locations_raw.csv", annotation)
 end
 
-close(reader)
-
-unique!(annotation)
-
-CSV.write("genomic_locations_raw.csv", annotation)
-
-annotation_overlap = DataFrame()
-
-# populate annotation_overlap by merging overlaps
-previous = nothing
-for current in eachrow(annotation)
-    if !isnothing(previous) && current.Chr == previous.Chr && current.Start <= previous.End
-        if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 800
-            current.End = max(current.End, previous.End)
-            current.Start = min(current.Start, previous.Start)
-        else
+"""
+    merged_catalog(reader::BAM.Reader)
+Creates pseudo bed file merging overlaps.
+Important to note this is still 1-based and not 0-based as regular bed files
+"""
+function merged_catalog(reader::BAM.Reader)
+    raw_catalog_locations(reader)
+    annotation = CSV.read("genomic_locations_raw.csv")
+    annotation_overlap = DataFrame()
+    previous = nothing
+    for current in eachrow(annotation)
+        if !isnothing(previous) && current.Chr == previous.Chr && current.Start <= previous.End
+            if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 800
+                current.End = max(current.End, previous.End)
+                current.Start = min(current.Start, previous.Start)
+            else
+                push!(annotation_overlap,previous)
+            end    
+        elseif !isnothing(previous) && current.Chr == previous.Chr && current.Start > previous.End
             push!(annotation_overlap,previous)
-        end    
-    elseif !isnothing(previous) && current.Chr == previous.Chr && current.Start > previous.End
-        push!(annotation_overlap,previous)
+        end
+        global previous = current
     end
-    global previous = current
+    push!(annotation_overlap,previous)
+    annotation_overlap.Range = string.(annotation_overlap.Chr,":",annotation_overlap.Start,
+                                    "-",annotation_overlap.End)
+    select!(annotation_overlap,Not(:Range),:Range)
+    sort!(annotation_overlap,[:Chr, :Start])
+    CSV.write("catalog_genomic_locations.bed", delim="\t", header=false,annotation_overlap)
 end
-push!(annotation_overlap,previous)
-
-#remove from memory 
-annotation = nothing
-
-annotation_overlap.Range = string.(annotation_overlap.Chr,":",annotation_overlap.Start,
-                                "-",annotation_overlap.End)
-
-select!(annotation_overlap,Not(:Range),:Range)
-sort!(annotation_overlap,[:Chr, :Start])
-
-# save pseudo bed file
-# Important to note this is still 1-based and not 0-based as regular bed files
-CSV.write("catalog_genomic_locations.bed", delim="\t", header=false,annotation_overlap)

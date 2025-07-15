@@ -17,7 +17,7 @@ feature_counts = Dict(key_name = string(seqname(record),":",leftposition(record)
 
 """
     feature_counts!(sample::AbstractString)
-populate the number of reads each sample has on the appropriate locations of the df_counts                     
+find number of reads each sample has on the appropriate locations of the df_counts                     
 """
 function feature_counts!(sample::AbstractString)
     temp_dict = copy(feature_counts)
