@@ -4,6 +4,7 @@ authors = ["csas0002 "]
 version = "0.1.0"
 
 [deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 BED = "8e4a8c10-cb6b-11e8-08d2-83478d609d67"
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
@@ -11,6 +12,7 @@ GenomicFeatures = "899a7d2d-5c61-547b-bef9-6698a8d05446"
 XAM = "d759349c-bcba-11e9-07c2-5b90f8f05f7c"
 
 [compat]
+ArgParse = "1.2.0"
 BED = "0.3.1"
 CSV = "0.10.15"
 DataFrames = "1.7.0"

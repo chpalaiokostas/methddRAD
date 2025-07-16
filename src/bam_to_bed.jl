@@ -1,9 +1,6 @@
+export bam_to_sorted_bed
 # turn bam files to a pseudo bed format
 # the bed files are 1-based and not regular 0-based ones
-using XAM
-
-# get list of bam files
-bam_list = ARGS[1]
 
 """
     bam_to_bed(filename::AbstractString)
@@ -49,12 +46,5 @@ function bam_to_sorted_bed(bam::AbstractString)
                 rm(file)
             end    
         end
-    end
-end
-
-open(bam_list, "r") do io
-    bam_files = readlines(io)
-    for bam in bam_files
-        bam_to_sorted_bed(bam)
     end
 end

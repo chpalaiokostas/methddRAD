@@ -2,7 +2,13 @@
 
 julia_version = "1.11.1"
 manifest_format = "2.0"
-project_hash = "c80303422741a3f6e0868e3d92beb9c7ef75a2db"
+project_hash = "6a133550be37e8fb16a87f5ec6e95ad1b5824894"
+
+[[deps.ArgParse]]
+deps = ["Logging", "TextWrap"]
+git-tree-sha1 = "22cf435ac22956a7b45b0168abbc871176e7eecc"
+uuid = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+version = "1.2.0"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -339,6 +345,11 @@ version = "1.12.1"
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 version = "1.11.0"
+
+[[deps.TextWrap]]
+git-tree-sha1 = "43044b737fa70bc12f6105061d3da38f881a3e3c"
+uuid = "b718987f-49a8-5099-9789-dcd902bef87d"
+version = "1.0.2"
 
 [[deps.TranscodingStreams]]
 deps = ["Random", "Test"]

@@ -1,19 +1,4 @@
-using BED
-using CSV
-using DataFrames
-using GenomicFeatures
-using XAM
-
-samples = readlines(ARGS[1])
-catalog = "catalog_features.bed"
-catalog_locations = DataFrame(CSV.File(catalog,header=[:Chrom,:Start,:End]))
-catalog_locations.Range = string.(catalog_locations.Chrom,":",catalog_locations.Start,"-",catalog_locations.End)
-select!(catalog_locations,:Range,Not(:Range))
-matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
-df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
-
-feature_counts = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
-                        for record in BED.Reader(open("catalog_features.bed")))
+export feature_counts!
 
 """
     feature_counts!(sample::AbstractString)
@@ -43,8 +28,3 @@ function feature_counts!(sample::AbstractString)
     df_counts[!,sample] = temp_df[!,sample]
 end
 
-for sample in samples
-    feature_counts!(sample)
-end
-
-CSV.write("feature_counts.txt",df_counts,delim="\t")
