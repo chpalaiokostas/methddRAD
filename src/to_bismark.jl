@@ -9,5 +9,5 @@ function to_bismark(sample::AbstractString, df::DataFrame)
     df = hcat(df[!,Cols(:Chr,:Start,:Strand)],rel_meth,df[!,sample],makeunique=true)
     df.pseudo_pattern_1 .= "CG"
     df.pseudo_pattern_2 .= "CG"
-    CSV.write("test_bismark_files/bismark_format_$sample.txt", df; delim="\t", writeheader=false)
+    CSV.write("bismark_files/bismark_format_$sample.txt", df; delim="\t", writeheader=false)
 end

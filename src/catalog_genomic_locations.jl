@@ -33,7 +33,7 @@ function raw_catalog_locations(reader::BAM.Reader)
             continue
         end
         if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 600)
-            push!(annotation,(Chr=BAM.refname(record), 
+            push!(annotation,(Chrom=BAM.refname(record), 
             Start=BAM.position(record),
             End=BAM.position(record) + BAM.templength(record),
             Strand=get_strand(record)))
@@ -55,22 +55,22 @@ function merged_catalog(reader::BAM.Reader)
     annotation_overlap = DataFrame()
     previous = nothing
     for current in eachrow(annotation)
-        if !isnothing(previous) && current.Chr == previous.Chr && current.Start <= previous.End
+        if !isnothing(previous) && current.Chrom == previous.Chrom && current.Start <= previous.End
             if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 800
                 current.End = max(current.End, previous.End)
                 current.Start = min(current.Start, previous.Start)
             else
                 push!(annotation_overlap,previous)
             end    
-        elseif !isnothing(previous) && current.Chr == previous.Chr && current.Start > previous.End
+        elseif !isnothing(previous) && current.Chrom == previous.Chrom && current.Start > previous.End
             push!(annotation_overlap,previous)
         end
         global previous = current
     end
     push!(annotation_overlap,previous)
-    annotation_overlap.Range = string.(annotation_overlap.Chr,":",annotation_overlap.Start,
+    annotation_overlap.Range = string.(annotation_overlap.Chrom,":",annotation_overlap.Start,
                                     "-",annotation_overlap.End)
     select!(annotation_overlap,Not(:Range),:Range)
-    sort!(annotation_overlap,[:Chr, :Start])
+    sort!(annotation_overlap,[:Chrom, :Start])
     CSV.write("catalog_genomic_locations.bed", delim="\t", header=false,annotation_overlap)
 end
