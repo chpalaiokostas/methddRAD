@@ -4,8 +4,8 @@ export feature_counts!
     feature_counts!(sample::AbstractString)
 find number of reads each sample has on the appropriate locations of the df_counts                     
 """
-function feature_counts!(sample::AbstractString, catalog::BED.Reader)
-    temp_dict = copy(features)
+function feature_counts!(sample::AbstractString, catalog::BED.Reader, df::DataFrame)
+    temp_dict = Dict(key => 0 for key in df[!,:Range])
     sample_name = string(sample,".bed")
     open(BED.Reader, sample_name) do features_x
         open(BED.Reader, catalog) do features_y
