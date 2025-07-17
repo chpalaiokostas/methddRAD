@@ -14,7 +14,7 @@ function bam_to_bed_temp(bam::AbstractString)
         while !eof(reader)
             empty!(record)
             read!(reader, record)
-            if !BAM.ismapped(record) || !startswith(BAM.refname(record),"CM") || !(0 < BAM.templength(record) < 1000)
+            if !BAM.ismapped(record) || !startswith(BAM.refname(record),"CM") || !(0 < BAM.templength(record) < 800)
                 continue
             end
             Chr=BAM.refname(record) 

@@ -25,7 +25,7 @@ function raw_catalog_locations(reader::BAM.Reader)
     reader = open(BAM.Reader,reader)
     record = BAM.Record()
     annotation = DataFrame()
-    # populate annotation with Chr, Start, End, Strand
+    # populate annotation with Chrom, Start, End, Strand
     while !eof(reader)
         empty!(record)
         read!(reader, record)
@@ -65,7 +65,7 @@ function merged_catalog(reader::BAM.Reader)
         elseif !isnothing(previous) && current.Chrom == previous.Chrom && current.Start > previous.End
             push!(annotation_overlap,previous)
         end
-        global previous = current
+        previous = current
     end
     push!(annotation_overlap,previous)
     annotation_overlap.Range = string.(annotation_overlap.Chrom,":",annotation_overlap.Start,
