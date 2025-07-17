@@ -1,9 +1,9 @@
 using ArgParse
-using Pkg
-Pkg.activate(".") 
 
-using methddRAD
-
+"""
+    parse_commandline()
+Parses command-line arguments
+"""
 function parse_commandline()
     s = ArgParseSettings(description="Get methylation estimates from methddRAD type of data")
 
@@ -26,6 +26,17 @@ function parse_commandline()
 end
 
 function main()
+    println("✅ Arguments parsed. Activating environment and loading packages...")
+    using Pkg
+    Pkg.activate(".") 
+
+    using BED
+    using CSV 
+    using DataFrames
+    using GenomicFeatures
+    using XAM
+    using methddRAD
+
     parsed_args = parse_commandline()
     merged_bam = parsed_args["merged_bam"] # merged bam file
 
