@@ -32,10 +32,10 @@ function raw_catalog_locations(reader::AbstractString)
         if !BAM.ismapped(record)
             continue
         end
-        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 600)
+        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 1000)
             push!(annotation,(Chrom=BAM.refname(record), 
-            Start=BAM.position(record),
-            End=BAM.position(record) + BAM.templength(record),
+            Start=BAM.position(record) - 1,
+            End=BAM.position(record) + BAM.templength(record) - 1,
             Strand=get_strand(record)))
         end
     end
@@ -56,7 +56,7 @@ function merged_catalog(reader::AbstractString)
     previous = nothing
     for current in eachrow(annotation)
         if !isnothing(previous) && current.Chrom == previous.Chrom && current.Start <= previous.End
-            if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 800
+            if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 1000
                 current.End = max(current.End, previous.End)
                 current.Start = min(current.Start, previous.Start)
             else
@@ -70,7 +70,8 @@ function merged_catalog(reader::AbstractString)
     push!(annotation_overlap,previous)
     annotation_overlap.Range = string.(annotation_overlap.Chrom,":",annotation_overlap.Start,
                                     "-",annotation_overlap.End)
-    select!(annotation_overlap,Not(:Range),:Range)
+    annotation_overlap.Empty .= 0
+    select!(annotation_overlap,Not(:Strand),:Strand)
     sort!(annotation_overlap,[:Chrom, :Start])
     CSV.write("catalog_genomic_locations.bed", delim="\t", header=false,annotation_overlap)
 end

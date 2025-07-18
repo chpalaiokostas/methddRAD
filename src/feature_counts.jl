@@ -4,14 +4,16 @@ export feature_counts!
     feature_counts!(sample::AbstractString)
 find number of reads each sample has on the appropriate locations of the df_counts                     
 """
-function feature_counts!(sample::AbstractString, catalog::BED.Reader, df::DataFrame)
-    temp_dict = Dict(key => 0 for key in df[!,:Range])
+function feature_counts!(sample::AbstractString, catalog::AbstractString, df::DataFrame)
+    #temp_dict = Dict(key => 0 for key in df[!,:Range])
+    temp_dict = copy(features)
     sample_name = string(sample,".bed")
     open(BED.Reader, sample_name) do features_x
         open(BED.Reader, catalog) do features_y
             for (x, y) in eachoverlap(features_x, features_y)
                 key_name = string(seqname(y),":",leftposition(y),"-",rightposition(y))
-                temp_dict[key_name] = get(temp_dict, key_name, 0) + 1    
+                temp_dict[key_name] += 1
+                #temp_dict[key_name] = get(temp_dict, key_name, 0) + 1    
             end
         end
     end
@@ -25,6 +27,6 @@ function feature_counts!(sample::AbstractString, catalog::BED.Reader, df::DataFr
     temp_df.End = parse.(Int, temp_df.End)
     sort!(temp_df,[:Chrom,:Start])
     rename!(temp_df, "Counts" => sample)
-    df_counts[!,sample] = temp_df[!,sample]
+    df[!,sample] = temp_df[!,sample]
 end
 

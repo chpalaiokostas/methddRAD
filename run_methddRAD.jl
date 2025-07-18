@@ -3,8 +3,10 @@ using ArgParse
 using Pkg
 Pkg.activate(".")
 
+using Base.Threads
 using CSV 
 using DataFrames
+using GenomicFeatures
 using methddRAD
 
 """
@@ -38,7 +40,7 @@ function main()
 
     merged_bam = parsed_args["merged_bam"] # merged bam file
 
-    bam_dir = parsed_args["bam_files"] # directory of bam files
+    bam_dir = abspath(parsed_args["bam_files"]) # directory of bam files
     if isdir(bam_dir)
         bams = readdir(bam_dir)
         filter!(x -> endswith(x,"bam"),bams)
@@ -51,29 +53,28 @@ function main()
 
     merged_catalog(merged_bam)
     catalog = "catalog_genomic_locations.bed" # expected name from merged_catalog
+    catalog_locations = nothing
 
     try 
         isfile(catalog)
         println("✅ Successfully created the catalog with the genomic locations")
-        catalog_locations = DataFrame(CSV.File(catalog,header=[:Chrom,:Start,:End,:Strand,:Range]))
+        catalog_locations = DataFrame(CSV.File(catalog,header=[:Chrom,:Start,:End,:Range,:Empt,:Strand]))
     catch e
         println("❌ Error during catalog creation", e)
         exit(1)
     end
 
     # create pseudo bed files for each sample
-    for bam in bams
-        bam_to_sorted_bed(abspath(bam))
+    @threads for bam in string.(bam_dir,bams)
+        bam_to_sorted_bed(bam)
     end
 
-    println("✅ Successfully created pseudo bed files")
-    
     matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
     df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
-
     #features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
     #                        for record in BED.Reader(open(catalog)))
-
+    features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
+                        for record in BED.Reader(open("catalog_features.bed")))
     for sample in samples
         feature_counts!(sample,catalog,df_counts)
     end

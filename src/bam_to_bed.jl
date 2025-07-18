@@ -18,8 +18,8 @@ function bam_to_bed_temp(bam::AbstractString)
                 continue
             end
             Chr=BAM.refname(record) 
-            Start=BAM.position(record) # bed is 0-based but not changed here
-            End=BAM.position(record) + BAM.templength(record)
+            Start=BAM.position(record) - 1# bed is 0-based but not changed here
+            End=BAM.position(record) + BAM.templength(record) - 1
             line = join([Chr,Start,End], "\t")
             println(io,line)
         end
@@ -41,10 +41,8 @@ function bam_to_sorted_bed(bam::AbstractString)
     catch e
         println("❌ Error during sorting: ", e)
     finally
-        for file in readdir(".") 
-            if endswith(file, ".tmp")
-                rm(file)
-            end    
+        if isfile(temp_name)
+            rm(temp_name)
         end
     end
 end
