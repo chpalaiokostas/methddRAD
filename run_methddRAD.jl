@@ -3,6 +3,8 @@ using ArgParse
 using Pkg
 Pkg.activate(".")
 
+using CSV 
+using DataFrames
 using methddRAD
 
 """
@@ -33,6 +35,7 @@ end
 function main()
     println("✅ Arguments parsed. Activating environment and loading packages...")
     parsed_args = parse_commandline()
+
     merged_bam = parsed_args["merged_bam"] # merged bam file
 
     bam_dir = parsed_args["bam_files"] # directory of bam files
@@ -59,13 +62,12 @@ function main()
     end
 
     # create pseudo bed files for each sample
-    open(bams, "r") do io
-        bams = readlines(io)
-        for bam in bams
-            bam_to_sorted_bed(bam)
-        end
+    for bam in bams
+        bam_to_sorted_bed(abspath(bam))
     end
 
+    println("✅ Successfully created pseudo bed files")
+    
     matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
     df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
 

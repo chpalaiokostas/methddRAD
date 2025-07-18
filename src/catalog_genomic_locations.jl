@@ -21,7 +21,7 @@ end
 Find all unique locations.
 Needs a merged bam file from all available samples
 """
-function raw_catalog_locations(reader::BAM.Reader)
+function raw_catalog_locations(reader::AbstractString)
     reader = open(BAM.Reader,reader)
     record = BAM.Record()
     annotation = DataFrame()
@@ -49,9 +49,9 @@ end
 Creates pseudo bed file merging overlaps.
 Important to note this is still 1-based and not 0-based as regular bed files
 """
-function merged_catalog(reader::BAM.Reader)
+function merged_catalog(reader::AbstractString)
     raw_catalog_locations(reader)
-    annotation = CSV.read("genomic_locations_raw.csv")
+    annotation = CSV.read("genomic_locations_raw.csv", DataFrame)
     annotation_overlap = DataFrame()
     previous = nothing
     for current in eachrow(annotation)
