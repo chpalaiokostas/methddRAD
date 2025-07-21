@@ -5,9 +5,11 @@ Pkg.activate(".")
 
 using Base.Threads
 using CSV 
+using BED
 using DataFrames
 using GenomicFeatures
 using methddRAD
+using XAM
 
 """
     parse_commandline()
@@ -74,9 +76,9 @@ function main()
     #features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
     #                        for record in BED.Reader(open(catalog)))
     features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
-                        for record in BED.Reader(open("catalog_features.bed")))
+                        for record in BED.Reader(open("catalog_genomic_locations.bed")))
     for sample in samples
-        feature_counts!(sample,catalog,df_counts)
+        feature_counts!(sample,catalog,df_counts,features)
     end
 
     CSV.write("feature_counts_raw.txt",df_counts,delim="\t")
