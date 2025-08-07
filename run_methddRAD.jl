@@ -53,28 +53,28 @@ function main()
 
     samples = readlines(parsed_args["samples"]) # file with sample names
 
-    merged_catalog(merged_bam)
+    #merged_catalog(merged_bam)
     catalog = "catalog_genomic_locations.bed" # expected name from merged_catalog
     catalog_locations = nothing
 
     try 
         isfile(catalog)
         println("✅ Successfully created the catalog with the genomic locations")
-        catalog_locations = DataFrame(CSV.File(catalog,header=[:Chrom,:Start,:End,:Range,:Empt,:Strand]))
+        catalog_locations = DataFrame(CSV.File(catalog,header=[:Chrom,:Start,:End,:Range,:Empty,:Strand]))
     catch e
         println("❌ Error during catalog creation", e)
         exit(1)
     end
 
     # create pseudo bed files for each sample
-    @threads for bam in string.(bam_dir,bams)
-        bam_to_sorted_bed(bam)
-    end
+    #@threads for bam in string.(bam_dir,bams)
+    #    bam_to_sorted_bed(bam)
+    #end
 
     matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
     df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
-    #features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
-    #                        for record in BED.Reader(open(catalog)))
+    features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
+                            for record in BED.Reader(open(catalog)))
     features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
                         for record in BED.Reader(open("catalog_genomic_locations.bed")))
     for sample in samples
