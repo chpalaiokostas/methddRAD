@@ -1,7 +1,7 @@
 export normalize_plus_bismark
 
 """
-    normalize_read_counts(df::DataFrame)
+    normalize_plus_bismark(df::DataFrame)
 Normalize read counts based on number of reads each sample has.
 The normalized value is multiplied by 1_000_000 and rounded to nearest integer.
 """
@@ -12,6 +12,6 @@ function normalize_plus_bismark(df::DataFrame)
     mapcols!(col -> Int.(round.(col;digits=0)), meth_counts_norm_filt, cols=sample_names)
     max_values = maximum.(eachrow(meth_counts_norm_filt[!, sample_names]))
     for sample in sample_names
-        to_bismark(sample,meth_counts_norm_filt)
+        to_bismark(sample,max_values,meth_counts_norm_filt)
     end
 end

@@ -32,7 +32,7 @@ function raw_catalog_locations(reader::AbstractString)
         if !BAM.ismapped(record)
             continue
         end
-        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) < 1000)
+        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) <= 600)
             push!(annotation,(Chrom=BAM.refname(record), 
             Start=BAM.position(record) - 1,
             End=BAM.position(record) + BAM.templength(record) - 1,
@@ -47,7 +47,6 @@ end
 """
     merged_catalog(reader::BAM.Reader)
 Creates pseudo bed file merging overlaps.
-Important to note this is still 1-based and not 0-based as regular bed files
 """
 function merged_catalog(reader::AbstractString)
     raw_catalog_locations(reader)
@@ -56,7 +55,7 @@ function merged_catalog(reader::AbstractString)
     previous = nothing
     for current in eachrow(annotation)
         if !isnothing(previous) && current.Chrom == previous.Chrom && current.Start <= previous.End
-            if (max(current.End, previous.End) - min(current.Start, previous.Start)) < 1000
+            if (max(current.End, previous.End) - min(current.Start, previous.Start)) <= 800
                 current.End = max(current.End, previous.End)
                 current.Start = min(current.Start, previous.Start)
             else

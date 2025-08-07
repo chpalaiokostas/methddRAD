@@ -2,7 +2,7 @@ export feature_counts!
 
 """
     feature_counts!(sample::AbstractString)
-find number of reads each sample has on the appropriate locations of the df_counts                     
+find the number of reads each sample has on the appropriate locations of the dataframe that holds the catalog                   
 """
 function feature_counts!(sample::AbstractString, catalog::AbstractString, df::DataFrame, features::Dict{String, Int64})
     #temp_dict = Dict(key => 0 for key in df[!,:Range])
@@ -13,7 +13,6 @@ function feature_counts!(sample::AbstractString, catalog::AbstractString, df::Da
             for (x, y) in eachoverlap(features_x, features_y)
                 key_name = string(seqname(y),":",leftposition(y),"-",rightposition(y))
                 temp_dict[key_name] += 1
-                #temp_dict[key_name] = get(temp_dict, key_name, 0) + 1    
             end
         end
     end

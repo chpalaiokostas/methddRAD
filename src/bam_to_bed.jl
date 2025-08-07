@@ -1,10 +1,9 @@
 export bam_to_sorted_bed
 # turn bam files to a pseudo bed format
-# the bed files are 1-based and not regular 0-based ones
 
 """
     bam_to_bed(filename::AbstractString)
-creates a pseudo 1-based bed file 
+creates a pseudo bed file 
 """    
 function bam_to_bed_temp(bam::AbstractString)
     reader = open(BAM.Reader, bam)
@@ -14,11 +13,11 @@ function bam_to_bed_temp(bam::AbstractString)
         while !eof(reader)
             empty!(record)
             read!(reader, record)
-            if !BAM.ismapped(record) || !startswith(BAM.refname(record),"CM") || !(0 < BAM.templength(record) < 800)
+            if !BAM.ismapped(record) || !startswith(BAM.refname(record),"CM") || !(0 < BAM.templength(record) <= 600)
                 continue
             end
             Chr=BAM.refname(record) 
-            Start=BAM.position(record) - 1# bed is 0-based but not changed here
+            Start=BAM.position(record) - 1 # bed is 0-based
             End=BAM.position(record) + BAM.templength(record) - 1
             line = join([Chr,Start,End], "\t")
             println(io,line)
