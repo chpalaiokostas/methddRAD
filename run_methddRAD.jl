@@ -53,7 +53,7 @@ function main()
 
     samples = readlines(parsed_args["samples"]) # file with sample names
 
-    #merged_catalog(merged_bam)
+    merged_catalog(merged_bam)
     catalog = "catalog_genomic_locations.bed" # expected name from merged_catalog
     catalog_locations = nothing
 
@@ -67,9 +67,9 @@ function main()
     end
 
     # create pseudo bed files for each sample
-    #@threads for bam in string.(bam_dir,bams)
-    #    bam_to_sorted_bed(bam)
-    #end
+    @threads for bam in string.(bam_dir,bams)
+        bam_to_sorted_bed(bam)
+    end
 
     matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
     df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
