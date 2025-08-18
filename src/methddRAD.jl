@@ -1,10 +1,10 @@
 module methddRAD
 
-#using BED
-#using CSV 
-#using DataFrames
-#using GenomicFeatures
-#using XAM
+using BED
+using CSV 
+using DataFrames
+using GenomicFeatures
+using XAM
 
 include("catalog_genomic_locations.jl")
 include("bam_to_bed.jl")
