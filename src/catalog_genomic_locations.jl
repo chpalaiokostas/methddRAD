@@ -32,7 +32,7 @@ function raw_catalog_locations(reader::AbstractString)
         if !BAM.ismapped(record)
             continue
         end
-        if (BAM.refname(record) == BAM.nextrefname(record)) && (0 < BAM.templength(record) <= 600)
+        if (BAM.refname(record) == BAM.nextrefname(record)) && (200 <= BAM.templength(record) <= 600)
             push!(annotation,(Chrom=BAM.refname(record), 
             Start=BAM.position(record) - 1,
             End=BAM.position(record) + BAM.templength(record) - 1,
