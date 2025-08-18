@@ -37,8 +37,8 @@ function parse_commandline()
 end
 
 function main()
-    println("✅ Arguments parsed. Activating environment and loading packages...")
     parsed_args = parse_commandline()
+    println("✅ Arguments parsed. Activating environment and loading packages...")
 
     merged_bam = parsed_args["merged_bam"] # merged bam file
 
@@ -75,8 +75,8 @@ function main()
     df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
     features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
                             for record in BED.Reader(open(catalog)))
-    features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
-                        for record in BED.Reader(open("catalog_genomic_locations.bed")))
+    #features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
+    #                    for record in BED.Reader(open("catalog_genomic_locations.bed")))
     for sample in samples
         feature_counts!(sample,catalog,df_counts,features)
     end
