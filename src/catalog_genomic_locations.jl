@@ -18,7 +18,7 @@ end
 
 """
     raw_catalog_locations(reader::BAM.Reader)
-Find all unique locations.
+Find all unique locations. Positions are coded as 0-based
 Needs a merged bam file from all available samples
 """
 function raw_catalog_locations(merged_bam::AbstractString)
