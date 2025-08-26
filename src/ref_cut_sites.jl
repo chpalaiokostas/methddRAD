@@ -38,12 +38,12 @@ Finds all start positions of a recognition site within a genome.
 - `genome::AbstractString`: The genome in the form of a FASTA file.
 """
 function all_cut_sites(genome::AbstractString)
-    enzyme_name = "AciI"
+    enzyme = "AciI"
     recognition_site = dna"CCGC"
     println("Will check for cut sites in the reference genome....")
     println("Enzyme: $enzyme")
     println("Recognition Site: $recognition_site")
-    println("Genome: $fasta\n")
+    println("Genome: $genome\n")
 
     rev_comp_site = reverse_complement(recognition_site)
     is_palindromic = (recognition_site == rev_comp_site)

@@ -103,7 +103,7 @@ function main()
         CSV.write("feature_counts_raw.txt",df_counts,delim="\t")
         normalize_plus_bismark(df_counts)
     else
-        fasta = parse_args["genome"]
+        fasta = parsed_args["genome"]
         cut_sites = all_cut_sites(fasta)
         df_cut_sites = DataFrame(cut_sites, [:Chrom, :Pos])
         matrix = zeros(Int,nrow(df_cut_sites),length(samples)) 
