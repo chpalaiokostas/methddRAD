@@ -38,15 +38,15 @@ function parse_commandline()
             action = :store_true
         "--genome"
             help = "Provide the reference genome file"
-            requred = false
+            required = false
             arg_type = String
     end
     return parse_args(s)
 end
 
 function main()
-    println("✅ Arguments parsed. Activating environment and loading packages...")
     parsed_args = parse_commandline()
+    println("✅ Arguments parsed. Activating environment and loading packages...")
 
     if !parsed_args["guided"] && isnothing(parsed_args["merged_bam"])
         error("The --merged_bam is needed when not using --guided")

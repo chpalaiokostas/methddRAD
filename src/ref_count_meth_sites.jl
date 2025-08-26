@@ -40,7 +40,7 @@ function count_meth_sites!(sample::AbstractString, cut_sites::Dict{AbstractStrin
         end
     end
     temp_df = DataFrame(Chrom=[split(key,":")[1] for key in keys(temp_dict)],
-                        Pos=[split(key,":")[2] for key in keys(temp_dict)] 
+                        Pos=[split(key,":")[2] for key in keys(temp_dict)], 
                         Counts=[temp_dict[key] for key in keys(temp_dict)])
     sort!(temp_df,[:Chrom,:Pos])
     rename!(temp_df, "Counts" => sample)
