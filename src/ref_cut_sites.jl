@@ -94,4 +94,5 @@ function all_cut_sites(genome::AbstractString)
         sort!(cut_sites,[:Chrom,:Pos])
         CSV.write("cut_sites.csv", cut_sites)
     end
+    return all_sites_by_sequence
 end

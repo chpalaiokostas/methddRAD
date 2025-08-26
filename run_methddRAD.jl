@@ -56,20 +56,25 @@ function main()
         error("The --genomed is needed when using --guided")
     end
 
+    bam_dir = abspath(parsed_args["bam_files"]) # directory of bam files
+    if isdir(bam_dir)
+        bams = readdir(bam_dir)
+        filter!(x -> endswith(x,"bam"),bams)
+    else
+        println("Need the directory with the bam files")
+        exit()
+    end
+
+    samples = readlines(parsed_args["samples"]) # file with sample names
+
+    # create pseudo bed files for each sample
+    @threads for bam in string.(bam_dir,bams)
+        bam_to_sorted_bed(bam)
+    end
+
     if !parsed_args["guided"]
         println("Will run a denovo approach to create a catalog with observed sites")
         merged_bam = parsed_args["merged_bam"] # merged bam file
-
-        bam_dir = abspath(parsed_args["bam_files"]) # directory of bam files
-        if isdir(bam_dir)
-            bams = readdir(bam_dir)
-            filter!(x -> endswith(x,"bam"),bams)
-        else
-            println("Need the directory with the bam files")
-            exit()
-        end
-
-        samples = readlines(parsed_args["samples"]) # file with sample names
 
         merged_catalog(merged_bam)
         catalog = "catalog_genomic_locations.bed" # expected name from merged_catalog
@@ -84,13 +89,9 @@ function main()
             exit(1)
         end
 
-        # create pseudo bed files for each sample
-        @threads for bam in string.(bam_dir,bams)
-            bam_to_sorted_bed(bam)
-        end
-
         matrix = zeros(Int,nrow(catalog_locations),length(samples)) 
         df_counts = hcat(catalog_locations,DataFrame(matrix,samples))
+
         features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
                                 for record in BED.Reader(open(catalog)))
         #features = Dict(key_name = string(seqname(record),":",leftposition(record),"-",rightposition(record)) => 0 
@@ -100,13 +101,20 @@ function main()
         end
 
         CSV.write("feature_counts_raw.txt",df_counts,delim="\t")
-
         normalize_plus_bismark(df_counts)
     else
         fasta = parse_args["genome"]
-        all_cut_sites(fasta)
-        
+        cut_sites = all_cut_sites(fasta)
+        df_cut_sites = DataFrame(cut_sites, [:Chrom, :Pos])
+        matrix = zeros(Int,nrow(df_cut_sites),length(samples)) 
+        df_counts = hcat(df_cut_sites,DataFrame(matrix,samples))
 
+        for sample in samples
+            count_meth_sites!(sample,cut_sites,df_counts)
+        end
+
+        CSV.write("feature_counts_raw.txt",df_counts,delim="\t")
+        normalize_cut_sites_bismark(df_counts)
     end
 end
 

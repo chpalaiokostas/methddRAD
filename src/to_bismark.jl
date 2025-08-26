@@ -11,3 +11,11 @@ function to_bismark(sample::AbstractString,max_values::AbstractVector, df::DataF
     df.pseudo_pattern_2 .= "CG"
     CSV.write("bismark_format_$sample.txt", df; delim="\t", writeheader=false)
 end
+
+function ref_cut_sites_to_bismark(sample::AbstractString,max_values::AbstractVector, df::DataFrame)
+    rel_meth = max_values .- df[!,sample]
+    df = hcat(df[!,Cols(:Chrom,:Pos)],"+",rel_meth,df[!,sample],makeunique=true)
+    df.pseudo_pattern_1 .= "CG"
+    df.pseudo_pattern_2 .= "CG"
+    CSV.write("bismark_format_$sample.txt", df; delim="\t", writeheader=false)
+end
