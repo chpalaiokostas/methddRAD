@@ -105,8 +105,8 @@ function main()
     else
         fasta = parsed_args["genome"]
         cut_sites = all_cut_sites(fasta)
-        df_cut_sites = DataFrame(cut_sites, [:Chrom, :Pos])
-        matrix = zeros(Int,nrow(df_cut_sites),length(samples)) 
+        df_cut_sites = CSV.read("cut_sites.csv",DataFrame)
+        matrix = zeros(Int,length(cut_sites),length(samples)) 
         df_counts = hcat(df_cut_sites,DataFrame(matrix,samples))
 
         for sample in samples

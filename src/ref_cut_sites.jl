@@ -43,7 +43,7 @@ function all_cut_sites(genome::AbstractString)
     println("Will check for cut sites in the reference genome....")
     println("Enzyme: $enzyme")
     println("Recognition Site: $recognition_site")
-    println("Genome: $genome\n")
+    println("Genome: $genome")
 
     rev_comp_site = reverse_complement(recognition_site)
     is_palindromic = (recognition_site == rev_comp_site)
@@ -82,7 +82,7 @@ function all_cut_sites(genome::AbstractString)
         println("\n❌ No cut sites found for $enzyme in any sequence.")
     else
         #num_sequences_with_hits = length(values(all_sites_by_sequence))
-        println("\n✅ Analysis Complete. Found $total_sites_found total site(s).")
+        println("\n✅ Found $total_sites_found total site(s).")
             
         cut_sites = DataFrame()
         for id in keys(all_sites_by_sequence)
@@ -94,5 +94,5 @@ function all_cut_sites(genome::AbstractString)
         sort!(cut_sites,[:Chrom,:Pos])
         CSV.write("cut_sites.csv", cut_sites)
     end
-    return all_sites_by_sequence
+    return Set(string.(cut_sites.Chrom,":",cut_sites.Pos))
 end
