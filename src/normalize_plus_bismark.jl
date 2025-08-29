@@ -1,5 +1,6 @@
 export normalize_plus_bismark
 export normalize_cut_sites_bismark
+
 """
     normalize_plus_bismark(df::DataFrame)
 Normalize read counts based on number of reads each sample has.
@@ -25,6 +26,6 @@ function normalize_cut_sites_bismark(df::DataFrame)
     mapcols!(col -> Int.(round.(col;digits=0)), meth_counts_norm, cols=sample_names)
     max_values = maximum.(eachrow(meth_counts_norm[!, sample_names]))
     for sample in sample_names
-        to_bismark(sample,max_values,meth_counts_norm)
+        ref_cut_sites_to_bismark(sample,max_values,meth_counts_norm)
     end
 end
