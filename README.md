@@ -2,7 +2,7 @@
 
 ### How to run the software
 
-usage: julia ./run_methddRAD.jl [-m MERGED_BAM] -b BAM_FILES -s SAMPLES
+`usage: julia ./run_methddRAD.jl [-m MERGED_BAM] -b BAM_FILES -s SAMPLES
                         [--guided] [--genome GENOME] [-h]
 
 Get methylation estimates from methddRAD type of data
@@ -18,4 +18,4 @@ optional arguments:
   --guided              Prior information about the expected cutting
                         sites in the genome
   --genome GENOME       Provide the reference genome file
-  -h, --help            show this help message and exit
+  -h, --help            show this help message and exit`
