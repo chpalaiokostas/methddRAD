@@ -8,6 +8,7 @@ methddRAD has been designed for the analysis of reduced representation sequencin
 
 The current version of methddRAD has the capacity of only handling data from reduced representation sequencing libraries that were created with the AciI restriction enzyme (recognition pattern: C|CGC).
 
+Additional information about the library construction for the creation of data suitable to be analyzed with methddRAD can be found at: DOI: dx.doi.org/10.17504/protocols.io.kxygx43bol8j/v1
 
 
 ### How to run the software
