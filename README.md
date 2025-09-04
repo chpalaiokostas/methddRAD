@@ -10,9 +10,9 @@ The current version of methddRAD has the capacity of only handling data from red
 
 There are two approaches that can be used to analyzed the data:
 
-1st: Here a similar approach to Marconi et al 2019 (https://www.nature.com/articles/s41598-019-51423-2) is followed based on creating a genome wide catalog of expected methylation sites where nearby sites are merged. Here the user need to create beforehand a merged bam file from all the available samples. Using samtools is probable the easiest way for this (https://www.htslib.org/doc/samtools-merge.html).
+*1st*: Here a similar approach to Marconi et al 2019 (https://www.nature.com/articles/s41598-019-51423-2) is followed based on creating a genome wide catalog of expected methylation sites where nearby sites are merged. Here the user need to create beforehand a merged bam file from all the available samples. Using samtools is probable the easiest way for this (https://www.htslib.org/doc/samtools-merge.html).
 
-2nd: Here a reference genome will not to be supplied. methddRAD would scan the reference genome and identify the sites where the AciI enzyme will cut. Those sites will be used as the baseline for deriving methylation related information for each sample.
+*2nd*: Here a reference genome will not to be supplied. methddRAD would scan the reference genome and identify the sites where the AciI enzyme will cut. Those sites will be used as the baseline for deriving methylation related information for each sample.
 
 Uppon successful completion of a methddRAD run bismark type of files will be created for each sample containing information about the level of methylation of each site. Those files can be supplied to methylation dedicated software for downstream analysis.
 
