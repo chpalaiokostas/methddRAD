@@ -38,4 +38,6 @@ optional arguments:
   -h, --help            show this help message and exit
 
 To follow the 1st analysis approach approach use the flag *-m*. In this case the *--guided* and *--genome* flags are not to be used.
+
+Likewise for the 2nd analysis approach one should not use the *-m* flag. Instead use the *--guided* and *--genome* ones.
 ```
