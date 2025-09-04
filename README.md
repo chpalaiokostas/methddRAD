@@ -1,4 +1,4 @@
-## methddRAD
+## methddRAD - A cost effective approach for deriving methylation related information
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
