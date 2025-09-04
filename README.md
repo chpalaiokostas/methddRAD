@@ -2,6 +2,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+### Description
+
+methddRAD has been designed for the analysis of reduced representation sequencing data that were created using methylation sensitive restriction enzymes. Those type of data offer a cost-effective approach for getting methylation related information in addition to the typical applications of reduced representation sequencing data. For the latter applications the interested user is advised to use a software like [Stacks](https://catchenlab.life.illinois.edu/stacks/)
+
+
 ### How to run the software
 
 ```
