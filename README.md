@@ -36,4 +36,6 @@ optional arguments:
                         sites in the genome
   --genome GENOME       Provide the reference genome file
   -h, --help            show this help message and exit
+
+To follow the 1st analysis approach approach use the flag *-m*. In this case the *--guided* and *--genome* flags are not to be used.
 ```
