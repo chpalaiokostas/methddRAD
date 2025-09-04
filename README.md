@@ -6,7 +6,7 @@
 
 methddRAD has been designed for the analysis of reduced representation sequencing data that were created using methylation sensitive restriction enzymes. Those type of data offer a cost-effective approach for getting methylation related information in addition to the typical applications of reduced representation sequencing data. For the latter applications the interested user is advised to use a software like [Stacks](https://catchenlab.life.illinois.edu/stacks/)
 
-The current version of methddRAD has the capacity of only handling data from reduced representation sequencing libraries that were created with the AciI restriction enzyme (recognition pattern: C|CGC). Additional information about the library construction for the creation of data suitable to be analyzed with methddRAD can be found at: DOI: dx.doi.org/10.17504/protocols.io.kxygx43bol8j/v1 (https://www.protocols.io/view/a-cost-effective-protocol-for-methylome-and-genome-g73ubzqnx.html)
+The current version of methddRAD has the capacity of only handling data from reduced representation sequencing libraries that were created with the AciI restriction enzyme (recognition pattern: C|CGC). Additional information about the library construction for the creation of data suitable to be analyzed with methddRAD can be found at: DOI: dx.doi.org/10.17504/protocols.io.kxygx43bol8j/v1(https://www.protocols.io/view/a-cost-effective-protocol-for-methylome-and-genome-g73ubzqnx.html)
 
 There are two approaches that can be used to analyzed the data:
 
