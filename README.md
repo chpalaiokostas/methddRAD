@@ -1,6 +1,6 @@
 ## methddRAD - A cost effective approach for deriving methylation related information
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![DOI](https://zenodo.org/badge/https://doi.org/10.5281/zenodo.17055775.svg)](https://doi.org/10.5281/zenodo.17055775)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![DOI](https://zenodo.org/badge/10.5281/zenodo.17055775.svg)](https://doi.org/10.5281/zenodo.17055775)
 
 ### Description
 
